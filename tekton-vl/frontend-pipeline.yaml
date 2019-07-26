@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: deploy-frontend
+spec:
+  resources:
+  tasks:
+  - name: deploy-secret 
+    taskRef:
+      name: openshift-client
+    runAfter:
+    params:
+    - name: ARGS
+      value: "apply -f https://raw.githubusercontent.com/VeerMuchandi/catalystdemo/master/deployments/vl-secret.yaml"
+  - name: deploy-app
+    taskRef:
+      name: openshift-client
+    runAfter:
+      - deploy-secret
+    params:
+    - name: ARGS
+      value: "rollout latest vivacious-line"
