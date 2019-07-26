@@ -13,5 +13,5 @@ spec:
       containers:
       - image: image-registry.openshift-image-registry.svc:5000/catalyst1/todo
         name: user-container
-        ports:
+        ports: 
         - containerPort: 3000
