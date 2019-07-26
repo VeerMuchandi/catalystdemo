@@ -3,7 +3,7 @@ kind: Service
 metadata:
   annotations:
   name: todo-serverless
-  namespace: gartner3
+  namespace: catalyst1
 spec:
   template:
     metadata:
