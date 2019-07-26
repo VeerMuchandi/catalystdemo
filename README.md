@@ -245,8 +245,15 @@ $ tkn pipelinerun logs deploy-pipeline-run-q9mpq -f
 
 * Show metrics in Grafana. Explain the need for serverless
 
-* Deploy Knative app
+* Deploy Knative app (need to login as admin. unable to do this as a regular user)
 
+```
+oc create -f https://raw.githubusercontent.com/VeerMuchandi/catalystdemo/5dbf3e12bcdf9a8e68ee9aa89f684dcdf88aff65/serverless/todo-serverless.yaml
+```
+
+* Watch serverless app coming up in a min and test the same.
+
+* Wait for a couple of mins and watch the pod scaling down to 0.
 
 
 
