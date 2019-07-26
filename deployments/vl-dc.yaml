@@ -1,0 +1,97 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: vivacious-line
+  name: vivacious-line
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    app: placeholder-app-label-d46881878f594a2dadfd963843452aab
+    deploymentconfig: vivacious-line
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: placeholder-app-label-d46881878f594a2dadfd963843452aab
+        deploymentconfig: vivacious-line
+    spec:
+      containers:
+      - env:
+        - name: DB_HOST
+          valueFrom:
+            secretKeyRef:
+              key: uri
+              name: vivacious-line-database-bind
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: user
+              name: vivacious-line-database-bind
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: vivacious-line-database-bind
+        image: image-registry.openshift-image-registry.svc:5000/catalyst1/vivacious-line:latest
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 3
+        name: vivacious-line
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 8443
+          protocol: TCP
+        - containerPort: 8778
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 3
+        resources:
+          limits:
+            memory: 2G
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  test: false
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - vivacious-line
+      from:
+        kind: ImageStreamTag
+        name: vivacious-line:latest
+    type: ImageChange

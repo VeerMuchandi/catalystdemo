@@ -1,0 +1,11 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  annotations:
+  generation: 1
+  labels:
+    app: vivacious-line
+  name: vivacious-line
+spec:
+  lookupPolicy:
+    local: false

@@ -1,0 +1,38 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  annotations:
+  labels:
+    app: vivacious-line
+  name: vivacious-line
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: vivacious-line:latest
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    git:
+      uri: https://github.com/VeerMuchandi/vivacious-line
+    type: Git
+  strategy:
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        name: redhat-openjdk18-openshift:1.5
+        namespace: openshift
+      incremental: true
+    type: Source
+  successfulBuildsHistoryLimit: 5
+  triggers:
+  - github:
+      secret: NnO0pbR5QdKLA7UHCrAdgQBFX32AfCWmybhCu7Oi
+    type: GitHub
+  - type: ConfigChange
+  - imageChange:
+      lastTriggeredImageID: registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift@sha256:6e229faa7fe907a594d452500ff543d53bdc39ce9409758a54fe309aa6955490
+    type: ImageChange
