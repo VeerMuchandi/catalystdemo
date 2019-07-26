@@ -9,7 +9,6 @@ metadata:
     app.kubernetes.io/name: nodejs
     app.kubernetes.io/part-of: todo-canary
   name: todo-canary
-  namespace: catalyst1
 spec:
   replicas: 1
   revisionHistoryLimit: 10
@@ -56,7 +55,6 @@ spec:
       from:
         kind: ImageStreamTag
         name: todo:latest
-        namespace: catalyst1
     type: ImageChange
   - type: ConfigChange
 ---
