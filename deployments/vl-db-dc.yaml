@@ -5,6 +5,7 @@ metadata:
   labels:
     app: vivacious-line
     app.kubernetes.io/part-of: fruits
+    app.kubernetes.io/name: mysql-database
   name: vivacious-line-database
 spec:
   replicas: 1
@@ -37,17 +38,17 @@ spec:
           valueFrom:
             secretKeyRef:
               key: database
-              name: vivacious-line-database-bind
+              name: vivacious-line-database-db-bind
         - name: MYSQL_USER
           valueFrom:
             secretKeyRef:
               key: user
-              name: vivacious-line-database-bind
+              name: vivacious-line-database-db-bind
         - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
               key: password
-              name: vivacious-line-database-bind
+              name: vivacious-line-database-db-bind
         image: image-registry.openshift-image-registry.svc:5000/openshift/mysql@sha256:16386423eaa147384d3a9820f3eb47aa1e7b93570f4d577593931d1f0cf09176
         imagePullPolicy: IfNotPresent
         livenessProbe:
