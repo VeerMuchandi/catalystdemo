@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
 metadata:
-  name: deploy-frontend
+  name: deploy-database
 spec:
   resources:
   tasks:

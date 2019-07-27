@@ -11,7 +11,7 @@
 
 
 
-## Demo Setup
+## Demo 1 Setup
 
 ### Deploy the two tiered NodeJS todo app
 
@@ -180,7 +180,7 @@ oc adm policy add-role-to-user edit -z pipeline
 
 
 
-## Demo Playbook
+## Demo 1 Playbook
 
 **to add recording link later**
 
@@ -255,6 +255,120 @@ oc create -f https://raw.githubusercontent.com/VeerMuchandi/catalystdemo/5dbf3e1
 
 * Wait for a couple of mins and watch the pod scaling down to 0.
 
+
+
+## Demo 2 Set up
+
+**Documentation to clean up **
+
+```
+oc new-project catalyst2
+```
+
+```
+oc create -f vl-db-secret.yaml 
+secret/vivacious-line-database-db-bind created
+```
+
+```
+$ oc create -f vl-db-dc.yaml 
+deploymentconfig.apps.openshift.io/vivacious-line-database created
+```
+
+```
+$ oc create -f vl-secret.yaml 
+secret/vivacious-line-database-bind created
+```
+
+```
+$ oc create -f vl-db-svc.yaml 
+service/vivacious-line-database created
+```
+
+```
+$ oc create -f vl-bc.yaml 
+buildconfig.build.openshift.io/vivacious-line created
+```
+
+```
+$ oc create -f vl-is.yaml 
+imagestream.image.openshift.io/vivacious-line created
+```
+
+```
+$ oc create -f vl-svc.yaml 
+service/vivacious-line created
+```
+
+```
+$ oc create -f vl-dc.yaml 
+deploymentconfig.apps.openshift.io/vivacious-line created
+```
+
+```
+$ oc expose svc vivacious-line
+route.route.openshift.io/vivacious-line exposed
+```
+
+```
+oc label dc vivacious-line app.kubernetes.io/part-of=fruits 
+oc label dc vivacious-line-database app.kubernetes.io/part-of=fruits
+```
+
+```
+oc start-build vivacious-line
+```
+
+
+```
+tekton-vl veer$ oc create -f frontend-pipeline.yaml 
+pipeline.tekton.dev/deploy-frontend created
+```
+
+```
+oc adm policy add-scc-to-user privileged -z pipeline
+oc adm policy add-role-to-user edit -z pipeline
+```
+
+
+```
+oc create -f https://raw.githubusercontent.com/tektoncd/catalog/master/openshift-client/openshift-client-task.yaml
+```
+
+
+```
+$ oc create -f database-pipeline.yaml 
+pipeline.tekton.dev/deploy-database created
+```
+
+## Demo 2 Playbook
+
+### Pre-step to simulate error
+
+In CRW, change database password in file `vl-db-secret.yaml` *but forget intentionally to change in `vl-secret.yaml`
+
+Run pipeline that updates database password 
+```
+$ tkn pipeline start deploy-database -s pipeline
+Pipelinerun started: deploy-database-run-wns8n
+```
+
+This will cause frontend to go RED as the frontend password doesnt match
+
+### Running Demo
+
+* Explain the issue on why frontend is red
+
+* Change the password in file `vl-secret.yml` to match with the database password
+
+* Run the pipeline that deploys the frontend with new password
+
+```
+$ tkn pipeline start deploy-frontend -s pipeline
+Pipelinerun started: deploy-frontend-run-g2zz9
+```
+
+* Now the app should work after pipeline runs.
 
 
 
