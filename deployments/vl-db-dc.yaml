@@ -4,6 +4,7 @@ metadata:
   annotations:
   labels:
     app: vivacious-line
+    app.kubernetes.io/part-of: fruits
   name: vivacious-line-database
 spec:
   replicas: 1

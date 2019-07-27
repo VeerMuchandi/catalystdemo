@@ -3,6 +3,7 @@ kind: DeploymentConfig
 metadata:
   labels:
     app: vivacious-line
+    app.kubernetes.io/part-of: fruits
   name: vivacious-line
 spec:
   replicas: 1
