@@ -11,7 +11,7 @@
 
 
 
-## Demo Setup
+## Demo 1 Setup
 
 ### Deploy the two tiered NodeJS todo app
 
@@ -180,7 +180,7 @@ oc adm policy add-role-to-user edit -z pipeline
 
 
 
-## Demo Playbook
+## Demo 1 Playbook
 
 **to add recording link later**
 
@@ -255,6 +255,126 @@ oc create -f https://raw.githubusercontent.com/VeerMuchandi/catalystdemo/5dbf3e1
 
 * Wait for a couple of mins and watch the pod scaling down to 0.
 
+
+
+## Demo 2 Set up
+
+**Documentation to clean up **
+
+```
+oc new-project catalyst2
+```
+
+```
+oc create -f https://raw.githubusercontent.com/VeerMuchandi/catalystdemo/master/deployments/vl-db-secret.yaml
+
+secret/vivacious-line-database-db-bind created
+```
+
+```
+$ oc create -f https://raw.githubusercontent.com/VeerMuchandi/catalystdemo/master/deployments/vl-db-dc.yaml
+
+deploymentconfig.apps.openshift.io/vivacious-line-database created
+```
+
+```
+$ oc create -f https://raw.githubusercontent.com/VeerMuchandi/catalystdemo/master/deployments/vl-secret.yaml
+
+secret/vivacious-line-database-bind created
+```
+
+```
+$ oc create -f https://raw.githubusercontent.com/VeerMuchandi/catalystdemo/master/deployments/vl-db-svc.yaml
+
+service/vivacious-line-database created
+```
+
+```
+$ oc create -f https://raw.githubusercontent.com/VeerMuchandi/catalystdemo/master/deployments/vl-bc.yaml
+
+buildconfig.build.openshift.io/vivacious-line created
+```
+
+```
+$ oc create -f https://raw.githubusercontent.com/VeerMuchandi/catalystdemo/master/deployments/vl-is.yaml
+
+imagestream.image.openshift.io/vivacious-line created
+```
+
+```
+$ oc create -f https://raw.githubusercontent.com/VeerMuchandi/catalystdemo/master/deployments/vl-svc.yaml
+
+service/vivacious-line created
+```
+
+```
+$ oc create -f https://raw.githubusercontent.com/VeerMuchandi/catalystdemo/master/deployments/vl-dc.yaml
+
+deploymentconfig.apps.openshift.io/vivacious-line created
+```
+
+```
+$ oc expose svc vivacious-line
+route.route.openshift.io/vivacious-line exposed
+```
+
+First time build
+```
+oc start-build vivacious-line
+```
+
+
+Run as cluster admin:
+```
+oc create serviceaccount pipeline
+oc adm policy add-scc-to-user privileged -z pipeline
+oc adm policy add-role-to-user edit -z pipeline
+```
+
+```
+oc create -f https://raw.githubusercontent.com/tektoncd/catalog/master/openshift-client/openshift-client-task.yaml
+```
+
+```
+$ oc create -f https://raw.githubusercontent.com/VeerMuchandi/catalystdemo/master/tekton-vl/frontend-pipeline.yaml
+
+pipeline.tekton.dev/deploy-frontend created
+```
+
+```
+$ oc create -f https://raw.githubusercontent.com/VeerMuchandi/catalystdemo/master/tekton-vl/database-pipeline.yaml
+
+pipeline.tekton.dev/deploy-database created
+```
+
+## Demo 2 Playbook
+
+### Simulate production error
+
+In CRW, change database password in file `vl-db-secret.yaml` *but forget intentionally to change in `vl-secret.yaml`
+
+Run pipeline that updates database password 
+```
+$ tkn pipeline start deploy-database -s pipeline
+Pipelinerun started: deploy-database-run-wns8n
+```
+
+This will cause frontend to go RED as the frontend password doesnt match
+
+### Demo to fix production error
+
+* Explain the issue on why frontend is red
+
+* Change the password in file `vl-secret.yml` to match with the database password
+
+* Run the pipeline that deploys the frontend with new password
+
+```
+$ tkn pipeline start deploy-frontend -s pipeline
+Pipelinerun started: deploy-frontend-run-g2zz9
+```
+
+* Now the app should work after pipeline runs.
 
 
 
