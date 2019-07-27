@@ -8,7 +8,7 @@ spec:
   - name: deploy-secret
     params:
     - name: ARGS
-      value: apply -f https://raw.githubusercontent.com/VeerMuchandi/catalystdemo/master/deployments/vl-secret.yaml
+      value: apply -f https://raw.githubusercontent.com/VeerMuchandi/catalystdemo/master/deployments/vl-db-secret.yaml
     taskRef:
       name: openshift-client
   - name: deploy-db
