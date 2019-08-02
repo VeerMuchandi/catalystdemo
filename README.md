@@ -251,6 +251,12 @@ $ tkn pipelinerun logs deploy-pipeline-run-q9mpq -f
 oc create -f https://raw.githubusercontent.com/VeerMuchandi/catalystdemo/5dbf3e12bcdf9a8e68ee9aa89f684dcdf88aff65/serverless/todo-serverless.yaml
 ```
 
+Optionally add label to make it part of the same cluster
+
+```
+oc label deployment $( oc get deployments | grep todo-serverless| awk '{printf $1}') app.kubernetes.io/part-of=todolist --overwrite
+```
+
 * Watch serverless app coming up in a min and test the same.
 
 * Wait for a couple of mins and watch the pod scaling down to 0.
