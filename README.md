@@ -70,6 +70,20 @@ oc label dc todo app.kubernetes.io/name=nodejs
 oc label dc mongodb app.kubernetes.io/name=mongodb
 ```
 
+Apply these labels to be able to connect the instances:
+
+```
+oc label dc todo app.kubernetes.io/instance=todo
+oc label dc mongodb app.kubernetes.io/instance=mongodb
+```
+
+Connect database instance to app instance
+
+```
+oc annotate dc todo app.openshift.io/connects-to=mongodb
+```
+
+
 
 If the image change trigger was removed before the build completed, then the app wouldn't be deployed. Roll out the app manually.
 
@@ -128,6 +142,11 @@ Group canary with the regular app in the topology view
 
 ```
 oc label dc todo-canary app.kubernetes.io/part-of=todolist --overwrite
+```
+
+Connect canary to database in the topology view
+```
+oc annotate dc todo-canary app.openshift.io/connects-to=mongodb
 ```
 
 
