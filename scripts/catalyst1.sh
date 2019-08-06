@@ -29,8 +29,9 @@ oc patch dc todo --patch '{"spec":{"triggers": [{"imageChangeParams": {"automati
 #use port 3000
 oc patch svc todo --patch '{"spec": { "ports": [{"port": 8080,"targetPort": 3000}]}}'
 
-#create route
-oc expose svc todo
+#create routes
+oc expose svc todo --path="/todo"
+oc expose svc todo --name=todo1 --hostname=$(oc get route todo --template='{{.spec.host}}')
 
 #make them part of todolist group
 oc label dc todo app.kubernetes.io/part-of=todolist 
@@ -56,6 +57,9 @@ oc set env dc/todo-canary MONGODB_USER=$MONGODB_USER \
 MONGODB_PASSWORD=$MONGODB_PASSWORD \
 MONGODB_DATABASE=$MONGODB_DATABASE \
 DATABASE_SERVICE_NAME=$DATABASE_SERVICE_NAME
+
+# add additional route
+oc expose svc todo-canary --name=todo-canary1 --hostname=$(oc get route todo-canary --template='{{.spec.host}}')
 
 #add it to the group
 oc label dc todo-canary app.kubernetes.io/part-of=todolist --overwrite

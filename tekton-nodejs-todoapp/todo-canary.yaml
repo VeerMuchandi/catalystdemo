@@ -83,6 +83,7 @@ metadata:
     app: todo-canary
   name: todo-canary
 spec:
+  path: /todo
   port:
     targetPort: 8080-tcp
   to:

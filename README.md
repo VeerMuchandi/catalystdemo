@@ -43,10 +43,11 @@ oc patch svc todo --patch '{"spec": { "ports": [{"port": 8080,"targetPort": 3000
 ```
 
 
-Create a route for the application
+Create a routes for the application
 
 ```
-$ oc expose svc todo
+$ oc expose svc todo --path="/todo"
+$ oc expose svc todo --name=todo1 --hostname=$(oc get route todo --template='{{.spec.host}}')
 ```
 
 Create a database to attach to the application. 
@@ -140,6 +141,11 @@ This pipeline will do canary deployment of the same application as a separate de
 
 ```
 oc create -f https://raw.githubusercontent.com/VeerMuchandi/catalystdemo/master/tekton-nodejs-todoapp/todo-canary.yaml
+```
+
+Add an additional route
+```
+$ oc expose svc todo-canary --name=todo-canary1 --hostname=$(oc get route todo-canary --template='{{.spec.host}}')
 ```
 
 Add environment variables to connect to database
