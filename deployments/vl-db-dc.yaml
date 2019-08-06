@@ -6,6 +6,7 @@ metadata:
     app: vivacious-line
     app.kubernetes.io/part-of: fruits
     app.kubernetes.io/name: mysql-database
+    app.kubernetes.io/instance: vivacious-line-database 
   name: vivacious-line-database
 spec:
   replicas: 1

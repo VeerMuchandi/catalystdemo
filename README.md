@@ -358,13 +358,12 @@ deploymentconfig.apps.openshift.io/vivacious-line created
 ```
 
 ```
-$ oc expose svc vivacious-line
+$ oc expose svc vivacious-line --path="/fruit/index.html"
 route.route.openshift.io/vivacious-line exposed
 ```
 
-First time build
 ```
-oc start-build vivacious-line
+oc expose svc vivacious-line --name=vl1 --hostname=$(oc get route vivacious-line --template='{{.spec.host}}')
 ```
 
 

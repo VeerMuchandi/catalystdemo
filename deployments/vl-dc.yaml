@@ -5,6 +5,7 @@ metadata:
     app: vivacious-line
     app.kubernetes.io/part-of: fruits
     app.kubernetes.io/name: spring
+    app.kubernetes.io/instance: vivacious-line
   name: vivacious-line
 spec:
   replicas: 1
