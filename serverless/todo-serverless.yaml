@@ -15,6 +15,15 @@ spec:
     spec:
       containers:
       - image: image-registry.openshift-image-registry.svc:5000/catalyst1/todo
+        env:
+        - name: DATABASE_SERVICE_NAME 
+          value: mongodb
+        - name: MONGODB_USER
+          value: user
+        - name: MONGODB_PASSWORD
+          value: password
+        - name: MONGODB_DATABASE
+          value: todos 
         name: user-container
         ports: 
         - containerPort: 3000
