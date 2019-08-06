@@ -42,10 +42,6 @@ oc label dc mongodb app.kubernetes.io/instance=mongodb
 oc annotate dc todo app.openshift.io/connects-to=mongodb
 
 
-
-#rollout app
-oc rollout latest todo
-
 # add deployment config for canary
 oc create -f https://raw.githubusercontent.com/VeerMuchandi/catalystdemo/master/tekton-nodejs-todoapp/todo-canary.yaml
 
@@ -74,4 +70,6 @@ oc adm policy add-role-to-user edit -z pipeline
 #pipeline sa needs privileged access. YOU NEED TO BE AN ADMIN TO DO THIS
 oc adm policy add-scc-to-user privileged -z pipeline
 
+#rollout app. THIS WILL HAVE TO RUN AFTER INITIAL BUILD COMPLETES
+oc rollout latest todo
 
