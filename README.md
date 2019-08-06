@@ -24,7 +24,11 @@ $ oc new-project catalyst1
 Create todo list application based on the code from [https://github.com/VeerMuchandi/nodejs-todo-app](https://github.com/VeerMuchandi/nodejs-todo-app) with name  `todo`
 
 ```
-$ oc new-app https://github.com/VeerMuchandi/nodejs-todo-app --name=todo
+$ oc new-app https://github.com/VeerMuchandi/nodejs-todo-app --name=todo \
+-e MONGODB_USER=user \
+-e MONGODB_PASSWORD=password \
+-e MONGODB_DATABASE=todos \
+-e DATABASE_SERVICE_NAME=mongodb
 ```
 
 Patch the `deploymentconfiguration` to disable automatic image change trigger for deployment
@@ -45,7 +49,7 @@ Create a route for the application
 $ oc expose svc todo
 ```
 
-Create a database to attach to the application. *Currently the database credentials are hard coded in the app. This code will be changed soon.*
+Create a database to attach to the application. 
 
 ```
 oc new-app --template=mongodb-ephemeral \
