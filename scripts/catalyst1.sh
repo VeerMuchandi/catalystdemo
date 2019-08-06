@@ -1,21 +1,27 @@
+DATABASE_SERVICE_NAME=mongodb
+MONGODB_USER=user
+MONGODB_PASSWORD=password
+MONGODB_ADMIN_PASSWORD=password
+MONGODB_DATABASE=todos
+
 oc new-project catalyst1
 
 #deploy database
 oc new-app --template=mongodb-ephemeral \
---param=DATABASE_SERVICE_NAME=mongodb \
---param=MONGODB_USER=user \
---param=MONGODB_PASSWORD=password \
---param=MONGODB_DATABASE=todos \
---param=MONGODB_ADMIN_PASSWORD=password
+--param=DATABASE_SERVICE_NAME=$DATABASE_SERVICE_NAME\
+--param=MONGODB_USER=$MONGODB_USER \
+--param=MONGODB_PASSWORD=$MONGODB_PASSWORD \
+--param=MONGODB_DATABASE=$MONGODB_DATABASE \
+--param=MONGODB_ADMIN_PASSWORD=$MONGODB_ADMIN_PASSWORD
 
 
 
 #deploy application
 oc new-app https://github.com/VeerMuchandi/nodejs-todo-app --name=todo \
--e MONGODB_USER=user \
--e MONGODB_PASSWORD=password \
--e MONGODB_DATABASE=todos \
--e DATABASE_SERVICE_NAME=mongodb
+-e MONGODB_USER=$MONGODB_USER \
+-e MONGODB_PASSWORD=$MONGODB_PASSWORD \
+-e MONGODB_DATABASE=$MONGODB_DATABASE \
+-e DATABASE_SERVICE_NAME=$DATABASE_SERVICE_NAME
 
 #disable autotrigger for deployment
 oc patch dc todo --patch '{"spec":{"triggers": [{"imageChangeParams": {"automatic": false,"containerNames": ["todo"],"from": {"kind": "ImageStreamTag","name": "todo:latest","namespace": "catalyst1"}},"type": "ImageChange"}]}}'
@@ -44,6 +50,12 @@ oc annotate dc todo app.openshift.io/connects-to=mongodb
 
 # add deployment config for canary
 oc create -f https://raw.githubusercontent.com/VeerMuchandi/catalystdemo/master/tekton-nodejs-todoapp/todo-canary.yaml
+
+# add environemnt variables to connect to DB
+oc set env dc/todo-canary MONGODB_USER=$MONGODB_USER \
+MONGODB_PASSWORD=$MONGODB_PASSWORD \
+MONGODB_DATABASE=$MONGODB_DATABASE \
+DATABASE_SERVICE_NAME=$DATABASE_SERVICE_NAME
 
 #add it to the group
 oc label dc todo-canary app.kubernetes.io/part-of=todolist --overwrite

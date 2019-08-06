@@ -142,6 +142,15 @@ This pipeline will do canary deployment of the same application as a separate de
 oc create -f https://raw.githubusercontent.com/VeerMuchandi/catalystdemo/master/tekton-nodejs-todoapp/todo-canary.yaml
 ```
 
+Add environment variables to connect to database
+
+```
+oc set env dc/todo-canary MONGODB_USER=user \
+MONGODB_PASSWORD=password \
+MONGODB_DATABASE=todos \
+DATABASE_SERVICE_NAME=mongodb
+```
+
 Group canary with the regular app in the topology view
 
 ```
