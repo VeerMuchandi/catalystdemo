@@ -8,7 +8,7 @@ oc new-project catalyst1
 
 #deploy database
 oc new-app --template=mongodb-ephemeral \
---param=DATABASE_SERVICE_NAME=$DATABASE_SERVICE_NAME\
+--param=DATABASE_SERVICE_NAME=$DATABASE_SERVICE_NAME \
 --param=MONGODB_USER=$MONGODB_USER \
 --param=MONGODB_PASSWORD=$MONGODB_PASSWORD \
 --param=MONGODB_DATABASE=$MONGODB_DATABASE \
