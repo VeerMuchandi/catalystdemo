@@ -4,7 +4,7 @@ metadata:
   annotations:
   labels:
     app: vivacious-line
-    app.kubernetes.io/part-of: fruits
+    app.kubernetes.io/part-of: fruitstocker
     app.kubernetes.io/name: mysql-database
     app.kubernetes.io/instance: vivacious-line-database 
   name: vivacious-line-database
