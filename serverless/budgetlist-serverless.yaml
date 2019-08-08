@@ -1,0 +1,29 @@
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  annotations:
+  name: budgetlist-serverless
+  namespace: catalyst1
+spec:
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/part-of: "budgetlist"
+      annotations:
+        sidecar.istio.io/inject: "false"
+        app.openshift.io/connects-to: "mongodb"
+    spec:
+      containers:
+      - image: image-registry.openshift-image-registry.svc:5000/catalyst1/todo
+        env:
+        - name: DATABASE_SERVICE_NAME 
+          value: mongodb
+        - name: MONGODB_USER
+          value: user
+        - name: MONGODB_PASSWORD
+          value: password
+        - name: MONGODB_DATABASE
+          value: todos 
+        name: user-container
+        ports: 
+        - containerPort: 3000

@@ -1,0 +1,93 @@
+---
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: budgetlist-canary
+    app.kubernetes.io/component: budgetlist-canary
+    app.kubernetes.io/instance: budgetlist-canary
+    app.kubernetes.io/name: nodejs
+    app.kubernetes.io/part-of: budgetlist
+  name: budgetlist-canary
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    app: budgetlist-canary
+    deploymentconfig: budgetlist-canary
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: budgetlist-canary
+        deploymentconfig: budgetlist-canary
+    spec:
+      containers:
+      - image: image-registry.openshift-image-registry.svc:5000/catalyst1/budgetlist
+        imagePullPolicy: Always
+        name: budgetlist
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  test: false
+  triggers:
+  - imageChangeParams:
+      containerNames:
+      - budgetlist 
+      from:
+        kind: ImageStreamTag
+        name: budgetlist:latest
+    type: ImageChange
+  - type: ConfigChange
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: budgetlist-canary
+  name: budgetlist-canary
+spec:
+  ports:
+  - name: 8080-tcp
+    port: 8080
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: budgetlist-canary
+    deploymentconfig: budgetlist-canary
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app: budgetlist-canary
+  name: budgetlist-canary
+spec:
+  path: /todo
+  port:
+    targetPort: 8080-tcp
+  to:
+    kind: Service
+    name: budgetlist-canary
+    weight: 100
+
