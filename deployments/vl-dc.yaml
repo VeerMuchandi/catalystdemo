@@ -3,7 +3,7 @@ kind: DeploymentConfig
 metadata:
   labels:
     app: vivacious-line
-    app.kubernetes.io/part-of: fruitstockist
+    app.kubernetes.io/part-of: fruitstocker 
     app.kubernetes.io/name: spring
     app.kubernetes.io/instance: vivacious-line
   name: vivacious-line
