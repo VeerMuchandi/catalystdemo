@@ -14,7 +14,7 @@ spec:
         app.openshift.io/connects-to: "mongodb"
     spec:
       containers:
-      - image: image-registry.openshift-image-registry.svc:5000/catalyst1/todo
+      - image: image-registry.openshift-image-registry.svc:5000/catalyst1/budgetlist
         env:
         - name: DATABASE_SERVICE_NAME 
           value: mongodb
