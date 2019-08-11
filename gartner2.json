@@ -1,0 +1,26 @@
+{
+  "apiVersion": "v1",
+  "kind": "Namespace",
+  "metadata": {
+    "annotations": {
+      "openshift.io/description": "",
+      "openshift.io/display-name": "",
+      "openshift.io/requester": "veer",
+      "openshift.io/sa.scc.mcs": "s0:c23,c12",
+      "openshift.io/sa.scc.supplemental-groups": "1000530000/10000",
+      "openshift.io/sa.scc.uid-range": "1000530000/10000"
+    },
+    "creationTimestamp": "2019-07-23T17:41:51Z",
+    "deletionTimestamp": "2019-08-11T18:13:59Z",
+    "name": "gartner2",
+    "resourceVersion": "18932967",
+    "selfLink": "/api/v1/namespaces/gartner2",
+    "uid": "27339d42-ad71-11e9-a964-525400485095"
+  },
+  "spec": {
+    "finalizers": []
+  },
+  "status": {
+    "phase": "Terminating"
+  }
+}

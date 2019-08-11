@@ -1,0 +1,26 @@
+{
+  "apiVersion": "v1",
+  "kind": "Namespace",
+  "metadata": {
+    "annotations": {
+      "openshift.io/description": "",
+      "openshift.io/display-name": "NodeJs Default example",
+      "openshift.io/requester": "admin",
+      "openshift.io/sa.scc.mcs": "s0:c25,c20",
+      "openshift.io/sa.scc.supplemental-groups": "1000640000/10000",
+      "openshift.io/sa.scc.uid-range": "1000640000/10000"
+    },
+    "creationTimestamp": "2019-07-24T22:08:35Z",
+    "deletionTimestamp": "2019-08-11T18:14:04Z",
+    "name": "gartner4",
+    "resourceVersion": "18932998",
+    "selfLink": "/api/v1/namespaces/gartner4",
+    "uid": "94cdbd39-ae5f-11e9-aa4d-5254006dbdbc"
+  },
+  "spec": {
+    "finalizers": []
+  },
+  "status": {
+    "phase": "Terminating"
+  }
+}
